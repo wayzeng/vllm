@@ -27,8 +27,8 @@ class ServeSubcommand(CLISubcommand):
             if args.model_tag is not None:
                 args.model = args.model_tag
             # Check if we have a model specified somewhere
-            elif '--config' not in args or \
-                 ('--config' in args and not args.model):
+            elif 'config' not in args or \
+                 ('config' in args and not args.model):
                 raise ValueError(
                     "With `vllm serve`, you should provide the model either as "
                     "a positional argument or in config file.")
