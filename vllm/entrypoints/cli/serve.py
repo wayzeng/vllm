@@ -4,7 +4,6 @@ import argparse
 
 import uvloop
 
-from vllm.engine.arg_utils import EngineArgs
 from vllm.entrypoints.cli.types import CLISubcommand
 from vllm.entrypoints.openai.api_server import run_server
 from vllm.entrypoints.openai.cli_args import (make_arg_parser,
@@ -27,7 +26,7 @@ class ServeSubcommand(CLISubcommand):
         # Otherwise use model from config (already in args.model)
 
         # Check if we have a model specified somewhere
-        if args.model == EngineArgs.model:  # Still has default value
+        if not args.model and not args.model_tag:
             raise ValueError(
                 "With `vllm serve`, you should provide the model either as a "
                 "positional argument or in config file.")
