@@ -20,16 +20,18 @@ class ServeSubcommand(CLISubcommand):
 
     @staticmethod
     def cmd(args: argparse.Namespace) -> None:
-        # If model is specified in CLI (as positional arg), it takes precedence
-        if hasattr(args, 'model_tag') and args.model_tag is not None:
-            args.model = args.model_tag
-        # Otherwise use model from config (already in args.model)
-
-        # Check if we have a model specified somewhere
-        if not args.model and not args.model_tag:
-            raise ValueError(
-                "With `vllm serve`, you should provide the model either as a "
-                "positional argument or in config file.")
+        if hasattr(args, 'model_tag'):
+            # If model is specified in CLI (as positional arg)
+            # it takes precedence
+            # Otherwise use model from config (already in args.model)
+            if args.model_tag is not None:
+                args.model = args.model_tag
+            # Check if we have a model specified somewhere
+            elif '--config' not in args or \
+                 ('--config' in args and not args.model):
+                raise ValueError(
+                    "With `vllm serve`, you should provide the model either as "
+                    "a positional argument or in config file.")
 
         uvloop.run(run_server(args))
 
